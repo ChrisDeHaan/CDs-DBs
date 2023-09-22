@@ -1,0 +1,25 @@
+{
+  "name": "challenge-12",
+  "version": "1.0.0",
+  "description": "this is an app designed to provide a user unfamiliar with BE, a tool to navigate it",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisDeHaan/CDs-DBs.git"
+  },
+  "author": "Chris DeHaan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChrisDeHaan/CDs-DBs/issues"
+  },
+  "homepage": "https://github.com/ChrisDeHaan/CDs-DBs#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "inquirer": "^8.0.0",
+    "mysql2": "^3.6.1"
+  }
+}
