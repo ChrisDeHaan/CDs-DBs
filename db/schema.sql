@@ -4,13 +4,13 @@ CREATE DATABASE company_database;
 USE company_database;
 
  CREATE TABLE departments (
-    id INT NOT NULL AUTO_INCREMENT,
+    id INT AUTO_INCREMENT,
     department_name VARCHAR(30) NOT NULL,
     PRIMARY KEY (id)
  );
 
 CREATE TABLE roles (
-    id INT NOT NULL AUTO_INCREMENT,
+    id INT AUTO_INCREMENT,
     title VARCHAR(30),
     salary INT NOT NULL,
     department_id INT NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE employees (
-    id INT NOT NULL AUTO_INCREMENT,
+    id INT AUTO_INCREMENT,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
     manager_id INT,
