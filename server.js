@@ -6,22 +6,24 @@ const PORT = process.env.PORT || 3000
 const app = express()
 
 const db = mysql.createConnection('mysql2://root:password@localhost:3306/Company_Database')
+module.exports = db
 
-function initPrompt () {
-    inquirer.prompt([
-        {
-            type: 'list',
-            message: 'What would you like to do?',
-            name: 'mainPrompt',
-            choices: ['View All Departments', 'View All Roles', 'View all Employees', 'Add a Department', 'Add an Employee', 'Update an Employee Role']
-        }
-    ])
-    .then((answer) => {
-        console.log(`----- You selected: "${answer.mainPrompt}". -----`)
-        initPrompt()
-    })
+const promptOptions = require('./utils/inquirerPrompts')
+const mySQL = require('./utils/displayFunctions')
+
+function initPrompt() {
+    inquirer.prompt(promptOptions.mainOptions)
+        .then((answer) => {
+            if (answer.mainOptions === 'View all Departments') {console.log(`----- You selected: "${answer.mainOptions}". -----`)}
+            if (answer.mainOptions === 'View all Roles') {console.log(`----- You selected: "${answer.mainOptions}". -----`)}
+            if (answer.mainOptions === 'View all Employees') {mySQL.displayEmployees().then(() => initPrompt())}
+            if (answer.mainOptions === 'Add a Department') {console.log(`----- You selected: "${answer.mainOptions}". -----`)}
+            if (answer.mainOptions === 'Add an Employee') {console.log(`----- You selected: "${answer.mainOptions}". -----`)}
+            if (answer.mainOptions === 'Update an Employee Role') {console.log(`----- You selected: "${answer.mainOptions}". -----`)}
+        })
 }
 
-initPrompt()
-
-app.listen(PORT, () => console.log(`Now listening on Port: ${PORT}`))
+app.listen(PORT, async () => {
+    await console.log(`Application is now running on Port: ${PORT}`)
+    initPrompt()
+})
