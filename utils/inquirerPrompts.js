@@ -1,4 +1,4 @@
-const promptOptions = (list) => {
+const promptOptions = (list1, list2) => {
     return {
         mainOptions: [
             {
@@ -27,9 +27,10 @@ const promptOptions = (list) => {
                 name: 'newRoleSalary',
             },
             {
-                type: 'input',
+                type: 'list',
                 message: 'What department is the new Role a part of?',
-                name: 'newRoleDept'
+                name: 'newRoleDept',
+                choices: list1
             }
         ],
         addEmployee: [
@@ -47,13 +48,13 @@ const promptOptions = (list) => {
                 type: 'list',
                 message: 'What role does this employee have?',
                 name: 'newEmpRole',
-                choices: list
+                choices: list1
             },
             {
                 type: 'list',
                 message: 'What manager oversees this employee?',
                 name: 'newEmpMan',
-                choices: list
+                choices: list2
             }
         ],
         updateEmployee: [
@@ -61,7 +62,7 @@ const promptOptions = (list) => {
                 type: 'list',
                 message: 'Which employee would you like to update?',
                 name: 'updateEmp',
-                choices: list
+                choices: list1
             }
         ]
     }

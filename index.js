@@ -54,31 +54,47 @@ function initPrompt() {
             }
 
             if (answer.mainOptions === 'Add a Department') {
-                inquirer.prompt(promptOptions().addDepartment).then((answer) => {
-                    db.query(`INSERT INTO departments(department_name) VALUES('${answer.newDept}')`, () => {
+                inquirer.prompt(promptOptions().addDepartment).then( answer => {
+                    db.query(`INSERT INTO departments(department_name) 
+                    VALUES('${answer.newDept}')
+                    `, () => {
                         initPrompt()
                     })
                 })
             }
 
             if (answer.mainOptions === 'Add a Role') {
-                inquirer.prompt(promptOptions().addRole).then((answer) => {
-                    db.query(`INSERT INTO roles(title, salary, department_id) VALUES('${answer.newRoleName}', '${answer.newRoleSalary}', '${answer.newRoleDept}')`, () => {
-                        initPrompt()
+                db.query(`SELECT department_name AS name, id AS value FROM departments`, (err, res) => {
+                    inquirer.prompt(promptOptions(res).addRole).then( answer => {
+                        db.query(`INSERT INTO roles(title, salary, department_id) 
+                        VALUES('${answer.newRoleName}', ${answer.newRoleSalary}, ${answer.newRoleDept})
+                        `, () => {
+                            initPrompt()
+                        })
                     })
                 })
             }
 
             if (answer.mainOptions === 'Add an Employee') {
-                console.log(`----- You selected: "${answer.mainOptions}". -----`)
-                inquirer.prompt(promptOptions().addEmployee).then((answer) => { console.log(answer.newEmpFirstName, answer.newEmpLastName, answer.newEmpRole, answer.newEmpMan); initPrompt() })
+                db.query(`SELECT title AS name, id AS value FROM roles`, (err1, res1) => {
+                    db.query(`SELECT CONCAT(first_name, ' ' , last_name) AS name, id AS value FROM employees`, (err2, res2) => {
+                        inquirer.prompt(promptOptions(res1, res2).addEmployee).then( answer => {
+                            db.query(`
+                            INSERT INTO employees(first_name, last_name, manager_id, role_id)
+                            VALUES('${answer.newEmpFirstName}','${answer.newEmpLastName}', ${answer.newEmpRole}, ${answer.newEmpMan})
+                            `, () => {
+                                initPrompt()
+                            })
+                        })
+                    })
+                })
             }
 
             if (answer.mainOptions === 'Update an Employee Role') {
                 console.log(`----- You selected: "${answer.mainOptions}". -----`)
 
                 db.query(`SELECT CONCAT(first_name, ' ', last_name) AS name, id AS value FROM employees`, (err, res) => {
-                    inquirer.prompt(promptOptions(res).updateEmployee).then((answer) => { console.log(answer.updateEmp); initPrompt() })
+                    inquirer.prompt(promptOptions(res).updateEmployee).then( answer => { console.log(answer.updateEmp); initPrompt() })
                 })
             }
         })
