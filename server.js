@@ -52,8 +52,11 @@ function initPrompt() {
             }
 
             if (answer.mainOptions === 'Add a Department') {
-                console.log(`----- You selected: "${answer.mainOptions}". -----`)
-                inquirer.prompt(promptOptions().addDepartment).then((answer) => { console.log(answer.newDept); initPrompt() })
+                inquirer.prompt(promptOptions().addDepartment).then((answer) => {
+                    db.query(`INSERT INTO departments(department_name) VALUES('${answer.newDept}')`, () => {
+                        initPrompt()
+                    })
+                })
             }
 
             if (answer.mainOptions === 'Add a Role') {
