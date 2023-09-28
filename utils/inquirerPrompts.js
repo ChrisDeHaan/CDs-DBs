@@ -57,12 +57,18 @@ const promptOptions = (list1, list2) => {
                 choices: list2
             }
         ],
-        updateEmployee: [
+        updateEmployeeRole: [
             {
                 type: 'list',
                 message: 'Which employee would you like to update?',
                 name: 'updateEmp',
                 choices: list1
+            },
+            {
+                type: 'list',
+                message: 'What role should the employee have?',
+                name: 'updateRole',
+                choices: list2
             }
         ]
     }
