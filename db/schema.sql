@@ -12,7 +12,7 @@ USE company_database;
 CREATE TABLE roles (
     id INT AUTO_INCREMENT,
     title VARCHAR(30),
-    salary INT NOT NULL,
+    salary DECIMAL NOT NULL,
     department_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (department_id)
