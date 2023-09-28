@@ -12,23 +12,40 @@ const promptOptions = require('./utils/inquirerPrompts')
 function initPrompt() {
     inquirer.prompt(promptOptions().mainOptions)
         .then((answer) => {
-            if (answer.mainOptions === 'View all Departments') { console.log(`----- You selected: "${answer.mainOptions}". -----`); initPrompt() }
+            if (answer.mainOptions === 'View all Departments') {
+                db.query(`SELECT department_name Departments FROM departments`, (err, res) => {
+                    console.table(res)
+                    initPrompt()
+                })
+            }
 
-            if (answer.mainOptions === 'View all Roles') { console.log(`----- You selected: "${answer.mainOptions}". -----`); initPrompt() }
+            if (answer.mainOptions === 'View all Roles') {
+                db.query(`
+                SELECT roles.title Title,
+                roles.salary Salary,
+                departments.department_name Department
+                FROM roles RIGHT JOIN departments
+                ON roles.department_id = departments.id;
+                `, (err, res) => {
+                    console.table(res)
+                    initPrompt()
+                })
+            }
 
             if (answer.mainOptions === 'View all Employees') {
                 db.query(`
-                SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Employee,
-                roles.title AS Title,
-                roles.department_id AS Department,
-                roles.salary AS Salary,
-                CONCAT(managers.first_name, ' ', managers.last_name) AS manager
+                SELECT CONCAT(employees.first_name, ' ', employees.last_name) Employee,
+                roles.title Title,
+                departments.department_name Department,
+                roles.salary Salary,
+                CONCAT(managers.first_name, ' ', managers.last_name) Manager
                 FROM employees INNER JOIN roles
                 ON employees.role_id = roles.id
-                LEFT JOIN employees AS managers
-                ON employees.manager_id = managers.id;
+                LEFT JOIN employees managers
+                ON employees.manager_id = managers.id
+                RIGHT JOIN departments
+                ON roles.department_id = departments.id;
                 `, (err, res) => {
-                    console.clear()
                     console.table(res)
                     initPrompt()
                 })
