@@ -91,10 +91,16 @@ function initPrompt() {
             }
 
             if (answer.mainOptions === 'Update an Employee Role') {
-                console.log(`----- You selected: "${answer.mainOptions}". -----`)
-
-                db.query(`SELECT CONCAT(first_name, ' ', last_name) AS name, id AS value FROM employees`, (err, res) => {
-                    inquirer.prompt(promptOptions(res).updateEmployee).then( answer => { console.log(answer.updateEmp); initPrompt() })
+                db.query(`SELECT CONCAT(first_name, ' ' , last_name) AS name, id AS value FROM employees`, (err1, res1) => {
+                    db.query(`SELECT title AS name, id AS value FROM roles`, (err2, res2) => {
+                        inquirer.prompt(promptOptions(res1, res2).updateEmployeeRole).then( answer => {
+                            db.query(`
+                            UPDATE employees SET role_id = ${answer.updateRole} WHERE id = ${answer.updateEmp}
+                            `, () => {
+                                initPrompt()
+                            })
+                        })
+                    })
                 })
             }
         })
