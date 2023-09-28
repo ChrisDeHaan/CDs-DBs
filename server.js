@@ -13,7 +13,7 @@ function initPrompt() {
     inquirer.prompt(promptOptions().mainOptions)
         .then((answer) => {
             if (answer.mainOptions === 'View all Departments') {
-                db.query(`SELECT department_name Departments FROM departments`, (err, res) => {
+                db.query(`SELECT id, department_name Departments FROM departments`, (err, res) => {
                     console.table(res)
                     initPrompt()
                 })
@@ -21,7 +21,8 @@ function initPrompt() {
 
             if (answer.mainOptions === 'View all Roles') {
                 db.query(`
-                SELECT roles.title Title,
+                SELECT roles.id,
+                roles.title Title,
                 roles.salary Salary,
                 departments.department_name Department
                 FROM roles RIGHT JOIN departments
@@ -34,7 +35,8 @@ function initPrompt() {
 
             if (answer.mainOptions === 'View all Employees') {
                 db.query(`
-                SELECT CONCAT(employees.first_name, ' ', employees.last_name) Employee,
+                SELECT employees.id,
+                CONCAT(employees.first_name, ' ', employees.last_name) Employee,
                 roles.title Title,
                 departments.department_name Department,
                 roles.salary Salary,
@@ -60,8 +62,11 @@ function initPrompt() {
             }
 
             if (answer.mainOptions === 'Add a Role') {
-                console.log(`----- You selected: "${answer.mainOptions}". -----`)
-                inquirer.prompt(promptOptions().addRole).then( (answer) => { console.log(answer.newRoleName, answer.newRoleSalary, answer.newRoleDept); initPrompt() })
+                inquirer.prompt(promptOptions().addRole).then((answer) => {
+                    db.query(`INSERT INTO roles(title, salary, department_id) VALUES('${answer.newRoleName}', '${answer.newRoleSalary}', '${answer.newRoleDept}')`, () => {
+                        initPrompt()
+                    })
+                })
             }
 
             if (answer.mainOptions === 'Add an Employee') {
