@@ -26,7 +26,8 @@ function initPrompt() {
                 roles.salary Salary,
                 departments.department_name Department
                 FROM roles RIGHT JOIN departments
-                ON roles.department_id = departments.id;
+                ON roles.department_id = departments.id
+                WHERE roles.id > 0;
                 `, (err, res) => {
                     console.table(res)
                     initPrompt()
@@ -46,7 +47,8 @@ function initPrompt() {
                 LEFT JOIN employees managers
                 ON employees.manager_id = managers.id
                 RIGHT JOIN departments
-                ON roles.department_id = departments.id;
+                ON roles.department_id = departments.id
+                WHERE employees.id > 0;
                 `, (err, res) => {
                     console.table(res)
                     initPrompt()
@@ -81,7 +83,7 @@ function initPrompt() {
                         inquirer.prompt(promptOptions(res1, res2).addEmployee).then( answer => {
                             db.query(`
                             INSERT INTO employees(first_name, last_name, manager_id, role_id)
-                            VALUES('${answer.newEmpFirstName}','${answer.newEmpLastName}', ${answer.newEmpRole}, ${answer.newEmpMan})
+                            VALUES('${answer.newEmpFirstName}','${answer.newEmpLastName}', ${answer.newEmpMan}, ${answer.newEmpRole})
                             `, () => {
                                 initPrompt()
                             })
