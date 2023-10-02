@@ -105,6 +105,10 @@ function initPrompt() {
                     })
                 })
             }
+
+            if (answer.mainOptions === 'End Program') {
+                process.exit()
+            }
         })
 }
 
