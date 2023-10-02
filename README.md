@@ -15,6 +15,8 @@
   - create the database by running the schema.sql file and seeding it with the seeds.sql file
   - run `npm start` and you're off!
 
+https://github.com/ChrisDeHaan/CDs-DBs/assets/135929135/9e6fabdb-8ee9-41a4-976b-f6f0e3528cb7
+
   ## License
   Refer to license in repo.
 
